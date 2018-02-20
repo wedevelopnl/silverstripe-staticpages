@@ -1,0 +1,11 @@
+---
+Name: staticpages
+---
+
+SilverStripe\CMS\Model\SiteTree:
+  extensions:
+    - TheWebmen\Staticpages\Extensions\StaticpagesExtension
+
+SilverStripe\CMS\Controllers\ContentController:
+  extensions:
+    - TheWebmen\Staticpages\Extensions\StaticpagesControllerExtension
