@@ -27,7 +27,8 @@ class StaticpagesController extends Controller
             return $this->_paths[$url];
         }
         $parts = parse_url($url);
-        $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $parts['host'] . $parts['path'];
+        $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $_SERVER['HTTP_HOST'] . $parts['path'];
+//        $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $parts['host'] . $parts['path'];
         $this->_paths[$url] = $path;
         return $path;
     }
