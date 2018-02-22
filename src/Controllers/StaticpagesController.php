@@ -17,20 +17,26 @@ class StaticpagesController extends Controller
     private $_paths = [];
 
     /**
-     * Convert a url to a path
+     * Generate the path from a url and fix the url for subsites
      * @param $url
      * @return string
      */
-    public function urlToPath($url)
+    public function transformURL($url)
     {
         if (array_key_exists($url, $this->_paths)) {
             return $this->_paths[$url];
         }
         $parts = parse_url($url);
+        //Fix url for subsites
+        $url = str_replace($parts['host'], $_SERVER['HTTP_HOST'], $url);
+        //Create path
         $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $_SERVER['HTTP_HOST'] . $parts['path'];
 //        $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $parts['host'] . $parts['path'];
         $this->_paths[$url] = $path;
-        return $path;
+        return [
+            'path' => $path,
+            'url' => $url
+        ];
     }
 
     /**
@@ -63,7 +69,9 @@ class StaticpagesController extends Controller
     public function exportSingle($url)
     {
         //Paths
-        $path = $this->urlToPath($url);
+        $transformedURL = $this->transformURL($url);
+        $path = $transformedURL['path'];
+        $url = $transformedURL['url'];
         $contentfile = $path . '/index.html';
 
         //Create path
@@ -94,7 +102,7 @@ class StaticpagesController extends Controller
      */
     public function urlHasCache($url)
     {
-        $path = $this->urlToPath($url);
+        $path = $this->transformURL($url)['path'];
         $contentfile = $path . '/index.html';
         return file_exists($contentfile);
     }
@@ -105,7 +113,7 @@ class StaticpagesController extends Controller
      */
     public function removeCacheForURL($url)
     {
-        $path = $this->urlToPath($url);
+        $path = $this->transformURL($url)['path'];
         $contentfile = $path . '/index.html';
         if (file_exists($contentfile)) {
             unlink($contentfile);
