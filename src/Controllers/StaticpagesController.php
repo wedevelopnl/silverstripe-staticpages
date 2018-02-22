@@ -142,7 +142,7 @@ class StaticpagesController extends Controller
         if (!is_dir($staticpath)) {
             return false;
         }
-        $cacheIndexTarget = Director::baseFolder() . 'staticpages/cacheindex.php';
+        $cacheIndexTarget = Director::baseFolder() . '/staticpages/cacheindex.php';
         if (!file_exists($cacheIndexTarget)) {
             return false;
         }
@@ -165,7 +165,7 @@ class StaticpagesController extends Controller
         }
 
         //Symlink index
-        $cacheIndexTarget = Director::baseFolder() . 'staticpages/cacheindex.php';
+        $cacheIndexTarget = Director::baseFolder() . '/staticpages/cacheindex.php';
         if (!file_exists($cacheIndexTarget)) {
             $cacheIndexLocation = Director::baseFolder() . '/vendor/thewebmen/silverstripe-staticpages/cacheindex.php';
             `ln -s $cacheIndexLocation; ln -s $cacheIndexTarget`;
