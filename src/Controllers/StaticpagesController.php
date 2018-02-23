@@ -167,7 +167,8 @@ class StaticpagesController extends Controller
             $this->removeAll();
             @Filesystem::makeFolder($staticpath);
             if (!is_dir($staticpath)) {
-                throw new \Error('Create the file ' . $staticpath . ' and make it writable');
+                echo('Create the file ' . $staticpath . ' and make it writable');
+                die;
             }
         }
 
@@ -177,14 +178,16 @@ class StaticpagesController extends Controller
             $cacheIndexLocation = Director::baseFolder() . '/vendor/thewebmen/silverstripe-staticpages/cacheindex.php';
             `ln -s $cacheIndexLocation; ln -s $cacheIndexTarget`;
             if (!file_exists($cacheIndexTarget)) {
-                throw new \Error('Make a symlink at ' . $cacheIndexTarget . ' pointing to ' . $cacheIndexLocation);
+                echo('Make a symlink at ' . $cacheIndexTarget . ' pointing to ' . $cacheIndexLocation);
+                die;
             }
         }
 
         //Modify htaccess
         $htaccessFile = Director::baseFolder() . '/.htaccess';
         if (!is_writable($htaccessFile)) {
-            throw new \Error('Make your htaccess file writeable or change the pointer to index.php into staticpages/cacheindex.php');
+            echo('Make your htaccess file writeable or manually change "RewriteRule .* index.php" into "RewriteRule .* staticpages/cacheindex.php"');
+            die;
         }
         $htaccessContent = file_get_contents($htaccessFile);
         $htaccessContent = str_replace('RewriteRule .* index.php', 'RewriteRule .* staticpages/cacheindex.php', $htaccessContent);
