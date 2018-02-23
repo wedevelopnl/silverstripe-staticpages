@@ -50,3 +50,7 @@ There are three tasks available:
 - dev/tasks/install-staticpages (create the staticpages folder, create a symlink and modify the htaccess)
 - dev/tasks/staticpages (generate all static pages, most of the times not needed)
 - dev/tasks/flush-staticpages (remove all generated pages, useful after a template change)
+
+## Flushing the cache
+You can flush the cache just like the regular silverstripe cache by adding ?flush=1 or ?flush=all to the url, where all deletes all static cache and 1 deletes only the cache for the current page.
+This works only for logged in users with admin rights.

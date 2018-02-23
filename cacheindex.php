@@ -8,7 +8,7 @@ function skipCache(){
     exit;
 }
 
-if(isset($_GET['skipcache']) && $_GET['skipcache'] == '1'){
+if(isset($_GET['flush']) || (isset($_GET['skipcache']) && $_GET['skipcache'] == '1')){
     skipCache();
 }
 
