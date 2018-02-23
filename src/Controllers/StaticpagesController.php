@@ -15,6 +15,38 @@ class StaticpagesController extends Controller
     private $_cachepath = 'staticpages';
     private $_urlsToExport = false;
     private $_paths = [];
+    private $_currentQueryString = false;
+
+    /**
+     * Get the current query string as md5 hash
+     * @return bool|string
+     */
+    public function currentQueryString()
+    {
+        if($this->_currentQueryString !== false){
+            return $this->_currentQueryString;
+        }
+        $this->_currentQueryString = '';
+        $staticpages_config = [];
+        $staticpagesConfigFile = Director::baseFolder() . '/staticpages_config.php';
+        if(file_exists($staticpagesConfigFile)){
+            require $staticpagesConfigFile;
+        }
+        if(array_key_exists('query_params', $staticpages_config)){
+            parse_str($_SERVER['QUERY_STRING'], $queryArray);
+            $queryString = [];
+            foreach($staticpages_config['query_params'] as $queryParam){
+                if(array_key_exists($queryParam, $queryArray)){
+                    $queryString[$queryParam] = $queryArray[$queryParam];
+                }
+            }
+            if(count($queryString)){
+                ksort($queryString);
+                $this->_currentQueryString = md5(http_build_query($queryString));
+            }
+        }
+        return $this->_currentQueryString;
+    }
 
     /**
      * Generate the path from a url and fix the url for subsites
@@ -64,14 +96,20 @@ class StaticpagesController extends Controller
     /**
      * Export a single page to the cache
      * @param $url The absolute page url
+     * @param $withQuery
      */
-    public function exportSingle($url)
+    public function exportSingle($url, $withQuery = false)
     {
         //Paths
         $transformedURL = $this->transformURL($url);
         $path = $transformedURL['path'];
         $url = $transformedURL['url'];
-        $contentfile = $path . '/index.html';
+        if($withQuery && $this->currentQueryString() != ''){
+            $url = $url . '?' . $_SERVER['QUERY_STRING'];
+            $contentfile = $path . '/' . $this->currentQueryString() . '.html';
+        }else {
+            $contentfile = $path . '/index.html';
+        }
 
         //Create path
         if (!is_dir($path)) {
@@ -97,12 +135,17 @@ class StaticpagesController extends Controller
     /**
      * Check if a url has cache
      * @param $url
+     * @param $withQuery
      * @return bool
      */
-    public function urlHasCache($url)
+    public function urlHasCache($url, $withQuery = false)
     {
         $path = $this->transformURL($url)['path'];
-        $contentfile = $path . '/index.html';
+        if($withQuery && $this->currentQueryString() != ''){
+            $contentfile = $path . '/' . $this->currentQueryString() . '.html';
+        }else{
+            $contentfile = $path . '/index.html';
+        }
         return file_exists($contentfile);
     }
 
@@ -113,9 +156,8 @@ class StaticpagesController extends Controller
     public function removeCacheForURL($url)
     {
         $path = $this->transformURL($url)['path'];
-        $contentfile = $path . '/index.html';
-        if (file_exists($contentfile)) {
-            unlink($contentfile);
+        if(is_dir($path)){
+            Filesystem::removeFolder($path);
         }
     }
 

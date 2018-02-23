@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Generate static cache for pages
+Generate static cache for pages, a cache file for a page is generated the first time you visit the pages that needs cache but doesn't have cache.
 
 ## Requirements
 
@@ -47,10 +47,25 @@ If your page contains dynamic content and/or forms then you need to ajax them
 
 ## Tasks
 There are three tasks available:
-- dev/tasks/install-staticpages (create the staticpages folder, create a symlink and modify the htaccess)
-- dev/tasks/staticpages (generate all static pages, most of the times not needed)
-- dev/tasks/flush-staticpages (remove all generated pages, useful after a template change)
+* dev/tasks/install-staticpages (create the staticpages folder, create a symlink and modify the htaccess)
+* dev/tasks/staticpages (generate all static pages, most of the times not needed)
+* dev/tasks/flush-staticpages (remove all generated pages, useful after a template change)
 
 ## Flushing the cache
 You can flush the cache just like the regular silverstripe cache by adding ?flush=1 or ?flush=all to the url, where all deletes all static cache and 1 deletes only the cache for the current page.
 This works only for logged in users with admin rights.
+
+## Pages with query parameters
+It is also possible to cache pages with query parameters this is especially useful for pages with pagination.
+You can do this by creating a file called staticpages_config.php in the root of your website with the following content:
+```
+<?php
+
+$staticpages_config = [
+    'query_params' => ['start']
+];
+```
+Where ['start'] is an array of query params to cache.
+
+## Todo
+* Find a better way of caching pages with query params
