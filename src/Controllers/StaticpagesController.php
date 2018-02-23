@@ -28,15 +28,14 @@ class StaticpagesController extends Controller
         }
         $parts = parse_url($url);
         //Fix url for subsites
-        $url = str_replace($parts['host'], $_SERVER['HTTP_HOST'], $url);
+        $newURL = str_replace($parts['host'], $_SERVER['HTTP_HOST'], $url);
         //Create path
         $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $_SERVER['HTTP_HOST'] . $parts['path'];
-//        $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $parts['host'] . $parts['path'];
-        $this->_paths[$url] = $path;
-        return [
+        $this->_paths[$url] = [
             'path' => $path,
-            'url' => $url
+            'url' => $newURL
         ];
+        return $this->_paths[$url];
     }
 
     /**
