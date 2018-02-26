@@ -14,7 +14,7 @@ class StaticpagesControllerExtension extends DataExtension
         if (!$this->owner->getRequest()->postVar('IsRender')) {
             $flush = $this->owner->getRequest()->getVar('flush');
             if ($flush) {
-                if (Permission::check('ADMIN')) {
+                if (Director::isDev() || Permission::check('ADMIN')) {
                     $controller = new StaticpagesController();
                     if ($flush == 'all') {
                         $controller->removeAll();
