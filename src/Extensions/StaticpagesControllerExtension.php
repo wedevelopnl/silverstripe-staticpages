@@ -2,6 +2,7 @@
 
 namespace TheWebmen\Staticpages\Extensions;
 
+use SilverStripe\Control\Director;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\Permission;
 use TheWebmen\Staticpages\Controllers\StaticpagesController;
