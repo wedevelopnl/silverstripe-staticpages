@@ -104,11 +104,12 @@ class StaticpagesController extends Controller
         $transformedURL = $this->transformURL($url);
         $path = $transformedURL['path'];
         $url = $transformedURL['url'];
+        $extension = Director::is_ajax() ? '-ajax.html' : '.html';
         if($withQuery && $this->currentQueryString() != ''){
             $url = $url . '?' . $_SERVER['QUERY_STRING'];
-            $contentfile = $path . '/' . $this->currentQueryString() . '.html';
+            $contentfile = $path . '/' . $this->currentQueryString() . $extension;
         }else {
-            $contentfile = $path . '/index.html';
+            $contentfile = $path . '/index' . $extension;
         }
 
         //Create path
