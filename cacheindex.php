@@ -45,6 +45,12 @@ if(array_key_exists('query_params', $staticpages_config)){
     }
 }
 
+//Ajax check
+$headers = getallheaders();
+if(array_key_exists('X-Requested-With', $headers) && $headers['X-Requested-With'] == 'XMLHttpRequest'){
+    $cacheFile = str_replace('.html', '-ajax.html', $cacheFile);
+}
+
 //Display cache
 if(file_exists($cacheFile)){
     echo file_get_contents($cacheFile);
