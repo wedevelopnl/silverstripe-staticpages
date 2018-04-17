@@ -86,6 +86,12 @@ class StaticpagesController extends Controller
             }
             $url = $page->AbsoluteLink();
             $urls[$url] = $url;
+            if(method_exists($page, 'generatestatic_actions')){
+                foreach($page->generatestatic_actions() as $action){
+                    $url = $page->AbsoluteLink($action);
+                    $urls[$url] = $url;
+                }
+            }
         }
 
         $this->extend('alterUrlsToExport', $urls);
