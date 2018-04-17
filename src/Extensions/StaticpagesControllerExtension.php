@@ -31,7 +31,7 @@ class StaticpagesControllerExtension extends DataExtension
                         $url = rtrim(Director::absoluteBaseURL() . $this->owner->getRequest()->getURL(), '/') . '/';
                         $renderCache = true;
                         if($url != $this->owner->AbsoluteLink()){
-                            if(method_exists($this->owner->dataRecord, 'generatestatic_actions') ){
+                            if(method_exists($this->owner, 'generatestatic_actions') ){
                                 $cachedActions = $this->owner->generatestatic_actions();
                                 if(!in_array($this->owner->getRequest()->param('Action'), $cachedActions)){
                                     $renderCache = false;
