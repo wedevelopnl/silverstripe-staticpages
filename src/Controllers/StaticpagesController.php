@@ -60,9 +60,15 @@ class StaticpagesController extends Controller
         }
         $parts = parse_url($url);
         //Fix url for subsites
-        $newURL = str_replace($parts['host'], $_SERVER['HTTP_HOST'], $url);
+        $httpHost = $_SERVER['HTTP_HOST'];
+        if(class_exists('SilverStripe\Subsites\Model\Subsite')){
+
+            $httpHost = \SilverStripe\Subsites\Model\Subsite::currentSubsite()->domain();
+        }
+        $newURL = str_replace($parts['host'], $httpHost, $url);
+
         //Create path
-        $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $_SERVER['HTTP_HOST'] . $parts['path'];
+        $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $httpHost . $parts['path'];
         $this->_paths[$url] = [
             'path' => $path,
             'url' => $newURL
