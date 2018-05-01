@@ -14,7 +14,7 @@ class StaticpagesControllerExtension extends DataExtension
                 if (Director::isDev() || Permission::check('ADMIN')) {
                     $controller = new StaticpagesController();
                     if ($flush == 'all') {
-                        $controller->removeAll();
+                        $controller->removeAll(true);
                     } else {
                         $controller->removeCacheForURL($this->owner->AbsoluteLink());
                     }
