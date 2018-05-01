@@ -253,9 +253,16 @@ class StaticpagesController extends Controller
     /**
      * Remove all cache
      */
-    public function removeAll()
+    public function removeAll($currentSubsiteOnly = false)
     {
-        $staticpath = Director::baseFolder() . '/' . $this->_cachepath;
+        $subDir = '';
+        if($currentSubsiteOnly){
+            if(class_exists('SilverStripe\Subsites\Model\Subsite')){
+                $httpHost = \SilverStripe\Subsites\Model\Subsite::currentSubsite()->domain();
+                $subDir = '/' . $httpHost;
+            }
+        }
+        $staticpath = Director::baseFolder() . '/' . $this->_cachepath . $subDir;
         if (is_dir($staticpath)) {
             $dirs = array_filter(glob($staticpath . '/*'), 'is_dir');
             foreach ($dirs as $dir) {
