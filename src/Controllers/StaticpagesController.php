@@ -62,8 +62,10 @@ class StaticpagesController extends Controller
         //Fix url for subsites
         $httpHost = $_SERVER['HTTP_HOST'];
         if(class_exists('SilverStripe\Subsites\Model\Subsite')){
-
-            $httpHost = \SilverStripe\Subsites\Model\Subsite::currentSubsite()->domain();
+            $currentSubsite = \SilverStripe\Subsites\Model\Subsite::currentSubsite();
+            if($currentSubsite){
+                $httpHost = $currentSubsite->domain();
+            }
         }
         $newURL = str_replace($parts['host'], $httpHost, $url);
 
@@ -258,8 +260,10 @@ class StaticpagesController extends Controller
         $subDir = '';
         if($currentSubsiteOnly){
             if(class_exists('SilverStripe\Subsites\Model\Subsite')){
-                $httpHost = \SilverStripe\Subsites\Model\Subsite::currentSubsite()->domain();
-                $subDir = '/' . $httpHost;
+                $currentSubsite = \SilverStripe\Subsites\Model\Subsite::currentSubsite();
+                if($currentSubsite){
+                    $subDir = '/' . $currentSubsite->domain();
+                }
             }
         }
         $staticpath = Director::baseFolder() . '/' . $this->_cachepath . $subDir;
