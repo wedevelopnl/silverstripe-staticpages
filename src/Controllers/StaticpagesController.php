@@ -70,7 +70,11 @@ class StaticpagesController extends Controller
         $newURL = $httpHost ? str_replace($parts['host'], $httpHost, $url) : $url;
 
         //Create path
-        $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $httpHost . $parts['path'];
+        if($httpHost){
+            $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $httpHost . $parts['path'];
+        }else{
+            $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . preg_replace('#^https?://#', '', $newURL);
+        }
         $this->_paths[$url] = [
             'path' => $path,
             'url' => $newURL
