@@ -67,7 +67,7 @@ class StaticpagesController extends Controller
                 $httpHost = $currentSubsite->domain();
             }
         }
-        $newURL = str_replace($parts['host'], $httpHost, $url);
+        $newURL = $httpHost ? str_replace($parts['host'], $httpHost, $url) : $url;
 
         //Create path
         $path = Director::baseFolder() . '/' . $this->_cachepath . '/' . $httpHost . $parts['path'];
