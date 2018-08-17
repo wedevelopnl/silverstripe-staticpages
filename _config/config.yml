@@ -9,3 +9,7 @@ SilverStripe\CMS\Model\SiteTree:
 SilverStripe\CMS\Controllers\ContentController:
   extensions:
     - TheWebmen\Staticpages\Extensions\StaticpagesControllerExtension
+
+SilverStripe\CMS\Controllers\CMSPageEditController:
+  extensions:
+    - TheWebmen\Staticpages\Extensions\CMSPageEditControllerExtension
