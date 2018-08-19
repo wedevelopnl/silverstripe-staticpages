@@ -1,9 +1,12 @@
 <?php
 namespace TheWebmen\Staticpages\Extensions;
+
 use SilverStripe\Control\Director;
 use SilverStripe\ORM\DataExtension;
 use SilverStripe\Security\Permission;
 use TheWebmen\Staticpages\Controllers\StaticpagesController;
+use SilverStripe\Versioned\Versioned;
+
 class StaticpagesControllerExtension extends DataExtension
 {
     public function onAfterInit()
@@ -21,6 +24,12 @@ class StaticpagesControllerExtension extends DataExtension
                 }
             } else {
                 $noCache = $this->owner->URLSegment == 'Security';
+                
+                $skipCache = $this->owner->getRequest()->getVar('skipcache');
+                $noCache = ($skipCache && $skipCache == 1) ? true : $noCache;
+                
+                $noCache = Versioned::get_reading_mode() == Versioned::DRAFT ? true : $noCache;
+                
                 if (!$noCache) {
                     if (!method_exists($this->owner->dataRecord, 'generatestatic') || $this->owner->dataRecord->generatestatic()) {
                         $controller = new StaticpagesController();
