@@ -28,6 +28,9 @@ class StaticpagesControllerExtension extends DataExtension
                 $skipCache = $this->owner->getRequest()->getVar('skipcache');
                 $noCache = ($skipCache && $skipCache == 1) ? true : $noCache;
                 
+                $quickEdit = $this->owner->getRequest()->getVar('qe');
+                $noCache = $quickEdit ? true : $noCache;
+                
                 $noCache = Versioned::get_reading_mode() == Versioned::DRAFT ? true : $noCache;
                 
                 if (!$noCache) {
