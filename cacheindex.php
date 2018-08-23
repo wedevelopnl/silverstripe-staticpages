@@ -8,8 +8,8 @@ function skipCache(){
     exit;
 }
 
-//Flush and skip
-if(isset($_GET['flush']) || (isset($_GET['skipcache']) && $_GET['skipcache'] == '1')){
+//Flush quickedit and skip
+if(isset($_GET['flush']) || isset($_GET['qe']) || (isset($_GET['skipcache']) && $_GET['skipcache'] == '1')){
     skipCache();
 }
 
